@@ -38,7 +38,7 @@ public class DocenteController {
 
     @GetMapping("/{id}")
     public Usuario obtenerPorId(@PathVariable UUID id) {
-        return usuarioService.obtenerPorId(id);
+        return usuarioService.obtenerDocente(id);
     }
 
     @PostMapping

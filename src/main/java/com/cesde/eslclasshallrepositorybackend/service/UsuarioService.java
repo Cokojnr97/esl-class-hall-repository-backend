@@ -46,6 +46,24 @@ public class UsuarioService {
                 .orElseThrow(() -> new RecursoNoEncontradoException("Usuario no encontrado con id: " + id));
     }
 
+    @Transactional(readOnly = true)
+    public Admin obtenerAdmin(UUID id) {
+        Usuario usuario = obtenerEntidad(id);
+        if (!(usuario instanceof Admin admin)) {
+            throw new RecursoNoEncontradoException("Administrador no encontrado con id: " + id);
+        }
+        return admin;
+    }
+
+    @Transactional(readOnly = true)
+    public Docente obtenerDocente(UUID id) {
+        Usuario usuario = obtenerEntidad(id);
+        if (!(usuario instanceof Docente docente)) {
+            throw new RecursoNoEncontradoException("Docente no encontrado con id: " + id);
+        }
+        return docente;
+    }
+
     @Transactional
     public Usuario crear(Usuario datos) {
         validarCrear(datos);

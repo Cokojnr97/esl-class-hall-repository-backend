@@ -38,7 +38,7 @@ public class AdminController {
 
     @GetMapping("/{id}")
     public Usuario obtenerPorId(@PathVariable UUID id) {
-        return usuarioService.obtenerPorId(id);
+        return usuarioService.obtenerAdmin(id);
     }
 
     @PostMapping

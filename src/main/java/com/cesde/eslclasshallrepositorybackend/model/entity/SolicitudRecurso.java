@@ -1,6 +1,7 @@
 package com.cesde.eslclasshallrepositorybackend.model.entity;
 
 import com.cesde.eslclasshallrepositorybackend.model.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.cesde.eslclasshallrepositorybackend.model.enums.EstadoSolicitud;
 import com.cesde.eslclasshallrepositorybackend.model.enums.TipoSolicitud;
 
@@ -25,6 +26,14 @@ import lombok.Setter;
 @Table(name = "solicitudes_recursos_migracion")
 public class SolicitudRecurso extends BaseEntity {
 
+    public SolicitudRecurso(TipoSolicitud tipoSolicitud, String payloadJson, Usuario solicitadoPor,
+            Recurso recursoObjetivo) {
+        this.tipoSolicitud = tipoSolicitud;
+        this.payloadJson = payloadJson;
+        this.solicitadoPor = solicitadoPor;
+        this.recursoObjetivo = recursoObjetivo;
+    }
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
     private TipoSolicitud tipoSolicitud;
@@ -38,13 +47,16 @@ public class SolicitudRecurso extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "solicitado_por_id", nullable = false)
+    @JsonIgnoreProperties({ "perfil", "solicitudes", "recursosCreados" })
     private Usuario solicitadoPor;
 
     @ManyToOne
     @JoinColumn(name = "aprobado_por_id")
+    @JsonIgnoreProperties({ "perfil", "solicitudes", "recursosCreados" })
     private Usuario aprobadoPor;
 
     @ManyToOne
     @JoinColumn(name = "recurso_objetivo_id")
+    @JsonIgnoreProperties({ "cursos" })
     private Recurso recursoObjetivo;
 }
