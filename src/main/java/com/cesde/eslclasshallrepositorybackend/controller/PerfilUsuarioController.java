@@ -14,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cesde.eslclasshallrepositorybackend.model.entity.PerfilUsuario;
+import com.cesde.eslclasshallrepositorybackend.dto.DtoMapper;
+import com.cesde.eslclasshallrepositorybackend.dto.PerfilUsuarioCreateRequestDto;
+import com.cesde.eslclasshallrepositorybackend.dto.PerfilUsuarioRequestDto;
+import com.cesde.eslclasshallrepositorybackend.dto.PerfilUsuarioResponseDto;
 import com.cesde.eslclasshallrepositorybackend.service.PerfilUsuarioService;
 
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Perfiles", description = "CRUD de perfiles de usuario")
@@ -31,23 +35,24 @@ public class PerfilUsuarioController {
     }
 
     @GetMapping
-    public List<PerfilUsuario> obtenerTodos() {
-        return perfilService.obtenerTodos();
+    public List<PerfilUsuarioResponseDto> obtenerTodos() {
+        return perfilService.obtenerTodos().stream().map(DtoMapper::toDto).toList();
     }
 
     @GetMapping("/{id}")
-    public PerfilUsuario obtenerPorId(@PathVariable UUID id) {
-        return perfilService.obtenerPorId(id);
+    public PerfilUsuarioResponseDto obtenerPorId(@PathVariable UUID id) {
+        return DtoMapper.toDto(perfilService.obtenerPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<PerfilUsuario> crear(@RequestBody PerfilUsuario perfil) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(perfilService.crear(perfil));
+    public ResponseEntity<PerfilUsuarioResponseDto> crear(@Valid @RequestBody PerfilUsuarioCreateRequestDto perfil) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(DtoMapper.toDto(perfilService.crear(DtoMapper.toEntity(perfil))));
     }
 
     @PutMapping("/{id}")
-    public PerfilUsuario actualizar(@PathVariable UUID id, @RequestBody PerfilUsuario perfil) {
-        return perfilService.actualizar(id, perfil);
+    public PerfilUsuarioResponseDto actualizar(@PathVariable UUID id, @Valid @RequestBody PerfilUsuarioRequestDto perfil) {
+        return DtoMapper.toDto(perfilService.actualizar(id, DtoMapper.toEntity(perfil)));
     }
 
     @DeleteMapping("/{id}")

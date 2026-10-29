@@ -9,7 +9,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,10 +16,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 @Table(name = "perfiles_usuario_migracion")
 public class PerfilUsuario extends BaseEntity {
+
+    public PerfilUsuario(String biografia, String telefono, Usuario usuario) {
+        this.biografia = biografia;
+        this.telefono = telefono;
+        this.usuario = usuario;
+    }
 
     @Column(length = 1000)
     private String biografia;
@@ -32,4 +36,30 @@ public class PerfilUsuario extends BaseEntity {
     @JoinColumn(name = "usuario_id", nullable = false, unique = true)
     @JsonIgnoreProperties({ "perfil", "solicitudes", "recursosCreados" })
     private Usuario usuario;
+
+    public String getBiografia() {
+        return biografia;
+    }
+
+    public void setBiografia(String biografia) {
+        this.biografia = biografia;
+    }
+
+    public String getTelefono() {
+        return telefono;
+    }
+
+    public void setTelefono(String telefono) {
+        this.telefono = telefono;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    
 }

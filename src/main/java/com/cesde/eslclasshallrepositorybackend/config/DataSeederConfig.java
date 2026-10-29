@@ -5,6 +5,7 @@ import java.util.Set;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 
 import com.cesde.eslclasshallrepositorybackend.model.entity.Admin;
 import com.cesde.eslclasshallrepositorybackend.model.entity.CursoClase;
@@ -26,6 +27,7 @@ import com.cesde.eslclasshallrepositorybackend.repository.UsuarioRepository;
 public class DataSeederConfig {
 
     @Bean
+    @ConditionalOnProperty(name = "app.seed.enabled", havingValue = "true")
     public CommandLineRunner seedDatabase(
             UsuarioRepository usuarioRepository,
             PerfilUsuarioRepository perfilRepository,

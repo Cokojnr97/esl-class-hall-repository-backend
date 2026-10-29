@@ -32,6 +32,10 @@ public abstract class BaseEntity {
 
     private LocalDateTime updatedAt;
 
+    public UUID getId() {
+        return id;
+    }
+
     @PrePersist
     protected void onCreate() {
         LocalDateTime now = LocalDateTime.now();
@@ -47,4 +51,26 @@ public abstract class BaseEntity {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
+    }
+    
+
 }

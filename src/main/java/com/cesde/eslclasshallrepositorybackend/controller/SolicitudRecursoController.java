@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cesde.eslclasshallrepositorybackend.model.entity.SolicitudRecurso;
+import com.cesde.eslclasshallrepositorybackend.dto.DtoMapper;
+import com.cesde.eslclasshallrepositorybackend.dto.SolicitudRecursoRequestDto;
+import com.cesde.eslclasshallrepositorybackend.dto.SolicitudRecursoResponseDto;
 import com.cesde.eslclasshallrepositorybackend.service.SolicitudRecursoService;
 
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -33,35 +36,37 @@ public class SolicitudRecursoController {
     }
 
     @GetMapping
-    public List<SolicitudRecurso> obtenerTodos() {
-        return solicitudService.obtenerTodos();
+    public List<SolicitudRecursoResponseDto> obtenerTodos() {
+        return solicitudService.obtenerTodos().stream().map(DtoMapper::toDto).toList();
     }
 
     @GetMapping("/{id}")
-    public SolicitudRecurso obtenerPorId(@PathVariable UUID id) {
-        return solicitudService.obtenerPorId(id);
+    public SolicitudRecursoResponseDto obtenerPorId(@PathVariable UUID id) {
+        return DtoMapper.toDto(solicitudService.obtenerPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<SolicitudRecurso> crear(@RequestBody SolicitudRecurso solicitud) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(solicitudService.crear(solicitud));
+    public ResponseEntity<SolicitudRecursoResponseDto> crear(@Valid @RequestBody SolicitudRecursoRequestDto solicitud) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(DtoMapper.toDto(solicitudService.crear(DtoMapper.toEntity(solicitud))));
     }
 
     @PutMapping("/{id}")
-    public SolicitudRecurso actualizar(@PathVariable UUID id, @RequestBody SolicitudRecurso solicitud) {
-        return solicitudService.actualizar(id, solicitud);
+    public SolicitudRecursoResponseDto actualizar(@PathVariable UUID id,
+            @Valid @RequestBody SolicitudRecursoRequestDto solicitud) {
+        return DtoMapper.toDto(solicitudService.actualizar(id, DtoMapper.toEntity(solicitud)));
     }
 
     @Operation(summary = "Aprobar una solicitud y publicar su recurso")
     @PostMapping("/{id}/aprobar")
-    public SolicitudRecurso aprobar(@PathVariable UUID id, @RequestParam UUID adminId) {
-        return solicitudService.aprobar(id, adminId);
+    public SolicitudRecursoResponseDto aprobar(@PathVariable UUID id, @RequestParam UUID adminId) {
+        return DtoMapper.toDto(solicitudService.aprobar(id, adminId));
     }
 
     @Operation(summary = "Rechazar una solicitud")
     @PostMapping("/{id}/rechazar")
-    public SolicitudRecurso rechazar(@PathVariable UUID id, @RequestParam UUID adminId) {
-        return solicitudService.rechazar(id, adminId);
+    public SolicitudRecursoResponseDto rechazar(@PathVariable UUID id, @RequestParam UUID adminId) {
+        return DtoMapper.toDto(solicitudService.rechazar(id, adminId));
     }
 
     @DeleteMapping("/{id}")

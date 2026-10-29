@@ -59,4 +59,58 @@ public class SolicitudRecurso extends BaseEntity {
     @JoinColumn(name = "recurso_objetivo_id")
     @JsonIgnoreProperties({ "cursos" })
     private Recurso recursoObjetivo;
+
+    public void setEstado(EstadoSolicitud estadoSolicitud) {
+        this.estado = estadoSolicitud;
+    }
+
+    public void setAprobadoPor(Admin admin) {
+        this.aprobadoPor = admin;
+    }
+
+    public TipoSolicitud getTipoSolicitud() {
+        return tipoSolicitud;
+    }
+
+    public EstadoSolicitud getEstado() {
+        return estado;
+    }
+
+    public String getPayloadJson() {
+        return payloadJson;
+    }
+
+    public Usuario getSolicitadoPor() {
+        return solicitadoPor;
+    }
+
+    public Usuario getAprobadoPor() {
+        return aprobadoPor;
+    }
+
+    public Recurso getRecursoObjetivo() {
+        return recursoObjetivo;
+    }
+
+    public void setTipoSolicitud(TipoSolicitud tipoSolicitud) {
+        this.tipoSolicitud = tipoSolicitud;
+    }
+
+    public void setPayloadJson(String payloadJson) {
+        this.payloadJson = payloadJson;
+    }
+
+    public void setSolicitadoPor(Usuario solicitadoPor) {
+        this.solicitadoPor = solicitadoPor;
+    }
+
+    public void setAprobadoPor(Usuario aprobadoPor) {
+        this.aprobadoPor = aprobadoPor;
+    }
+
+    public void setRecursoObjetivo(Recurso recursoObjetivo) {
+        this.recursoObjetivo = recursoObjetivo;
+    }
+
+
 }

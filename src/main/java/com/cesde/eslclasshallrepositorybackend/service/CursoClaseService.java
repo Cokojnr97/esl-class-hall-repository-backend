@@ -65,9 +65,16 @@ public class CursoClaseService {
     }
 
     private void validar(CursoClase datos) {
-        if (datos == null || datos.getNombre() == null || datos.getOrden() == null
+        if (datos == null || datos.getNombre() == null || datos.getNombre().isBlank() || datos.getOrden() == null
                 || datos.getDocente() == null || datos.getDocente().getId() == null) {
             throw new ReglaDeNegocioException("nombre, orden y docente.id son obligatorios");
+        }
+        if (datos.getNombre().length() > 180
+                || datos.getDescripcion() != null && datos.getDescripcion().length() > 1000) {
+            throw new ReglaDeNegocioException("El nombre o la descripción del curso supera la longitud permitida");
+        }
+        if (datos.getOrden() <= 0) {
+            throw new ReglaDeNegocioException("El orden del curso debe ser mayor que cero");
         }
     }
 }

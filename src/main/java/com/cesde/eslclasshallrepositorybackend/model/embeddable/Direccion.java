@@ -11,9 +11,15 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Embeddable
 public class Direccion {
+
+    public Direccion(String calle1, String ciudad1, String codigoPostal1, String pais1) {
+        this.calle = calle1;
+        this.ciudad = ciudad1;
+        this.codigoPostal = codigoPostal1;
+        this.pais = pais1;
+    }
 
     @Column(length = 120)
     private String calle;
@@ -26,4 +32,37 @@ public class Direccion {
 
     @Column(length = 80)
     private String pais;
+
+    public String getCalle() {
+        return calle;
+    }
+
+    public String getCiudad() {
+        return ciudad;
+    }
+
+    public String getCodigoPostal() {
+        return codigoPostal;
+    }
+
+    public String getPais() {
+        return pais;
+    }
+
+    public void setCalle(String calle) {
+        this.calle = calle;
+    }
+
+    public void setCiudad(String ciudad) {
+        this.ciudad = ciudad;
+    }
+
+    public void setCodigoPostal(String codigoPostal) {
+        this.codigoPostal = codigoPostal;
+    }
+
+    public void setPais(String pais) {
+        this.pais = pais;
+    }
+
 }

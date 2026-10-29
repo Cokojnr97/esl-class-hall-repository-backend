@@ -34,6 +34,8 @@ public class CursoClase extends BaseEntity {
         this.docente = docente;
     }
 
+    
+
     @Column(nullable = false, length = 180)
     private String nombre;
 
@@ -51,4 +53,44 @@ public class CursoClase extends BaseEntity {
     @OrderBy("titulo ASC")
     @JsonIgnore
     private Set<Recurso> recursos = new HashSet<>();
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public Integer getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Integer orden) {
+        this.orden = orden;
+    }
+
+    public Docente getDocente() {
+        return docente;
+    }
+
+    public void setDocente(Docente docente) {
+        this.docente = docente;
+    }
+
+    public Set<Recurso> getRecursos() {
+        return recursos;
+    }
+
+    public void setRecursos(Set<Recurso> recursos) {
+        this.recursos = recursos;
+    }
 }

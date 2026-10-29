@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cesde.eslclasshallrepositorybackend.model.entity.CursoClase;
+import com.cesde.eslclasshallrepositorybackend.dto.CursoClaseRequestDto;
+import com.cesde.eslclasshallrepositorybackend.dto.CursoClaseResponseDto;
+import com.cesde.eslclasshallrepositorybackend.dto.DtoMapper;
 import com.cesde.eslclasshallrepositorybackend.service.CursoClaseService;
 
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 @Tag(name = "Cursos", description = "CRUD de cursos o clases de los docentes")
@@ -32,23 +35,24 @@ public class CursoClaseController {
     }
 
     @GetMapping
-    public List<CursoClase> obtenerTodos(@RequestParam(required = false) UUID docenteId) {
-        return docenteId == null ? cursoService.obtenerTodos() : cursoService.obtenerPorDocente(docenteId);
+    public List<CursoClaseResponseDto> obtenerTodos(@RequestParam(required = false) UUID docenteId) {
+        return (docenteId == null ? cursoService.obtenerTodos() : cursoService.obtenerPorDocente(docenteId))
+                .stream().map(DtoMapper::toDto).toList();
     }
 
     @GetMapping("/{id}")
-    public CursoClase obtenerPorId(@PathVariable UUID id) {
-        return cursoService.obtenerPorId(id);
+    public CursoClaseResponseDto obtenerPorId(@PathVariable UUID id) {
+        return DtoMapper.toDto(cursoService.obtenerPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<CursoClase> crear(@RequestBody CursoClase curso) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(cursoService.crear(curso));
+    public ResponseEntity<CursoClaseResponseDto> crear(@Valid @RequestBody CursoClaseRequestDto curso) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(DtoMapper.toDto(cursoService.crear(DtoMapper.toEntity(curso))));
     }
 
     @PutMapping("/{id}")
-    public CursoClase actualizar(@PathVariable UUID id, @RequestBody CursoClase curso) {
-        return cursoService.actualizar(id, curso);
+    public CursoClaseResponseDto actualizar(@PathVariable UUID id, @Valid @RequestBody CursoClaseRequestDto curso) {
+        return DtoMapper.toDto(cursoService.actualizar(id, DtoMapper.toEntity(curso)));
     }
 
     @DeleteMapping("/{id}")

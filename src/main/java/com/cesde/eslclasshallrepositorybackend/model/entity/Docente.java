@@ -28,4 +28,13 @@ public class Docente extends Usuario {
     public Docente(String nombre, String email, String passwordHash) {
         super(nombre, email, passwordHash, RolUsuario.DOCENTE);
     }
+
+    public Set<CursoClase> getCursos() {
+        return cursos;
+    }
+
+    public void setCursos(Set<CursoClase> cursos) {
+        this.cursos = cursos;
+    }
+
 }

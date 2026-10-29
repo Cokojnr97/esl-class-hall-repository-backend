@@ -36,7 +36,11 @@ public class PerfilUsuarioService {
     @Transactional
     public PerfilUsuario crear(PerfilUsuario datos) {
         validar(datos);
-        datos.setUsuario(usuarioService.obtenerEntidad(datos.getUsuario().getId()));
+        UUID usuarioId = datos.getUsuario().getId();
+        if (perfilRepository.existsByUsuario_Id(usuarioId)) {
+            throw new ReglaDeNegocioException("El usuario ya tiene un perfil asociado");
+        }
+        datos.setUsuario(usuarioService.obtenerEntidad(usuarioId));
         return perfilRepository.save(datos);
     }
 
@@ -45,6 +49,7 @@ public class PerfilUsuarioService {
         if (datos == null) {
             throw new ReglaDeNegocioException("Los datos del perfil son obligatorios");
         }
+        validarCampos(datos);
         PerfilUsuario perfil = obtenerPorId(id);
         perfil.setBiografia(datos.getBiografia());
         perfil.setTelefono(datos.getTelefono());
@@ -59,6 +64,14 @@ public class PerfilUsuarioService {
     private void validar(PerfilUsuario datos) {
         if (datos == null || datos.getUsuario() == null || datos.getUsuario().getId() == null) {
             throw new ReglaDeNegocioException("usuario.id es obligatorio");
+        }
+        validarCampos(datos);
+    }
+
+    private void validarCampos(PerfilUsuario datos) {
+        if (datos.getBiografia() != null && datos.getBiografia().length() > 1000
+                || datos.getTelefono() != null && datos.getTelefono().length() > 30) {
+            throw new ReglaDeNegocioException("La biografía o el teléfono supera la longitud permitida");
         }
     }
 }

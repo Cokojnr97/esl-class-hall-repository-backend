@@ -14,9 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cesde.eslclasshallrepositorybackend.model.entity.Recurso;
+import com.cesde.eslclasshallrepositorybackend.dto.DtoMapper;
+import com.cesde.eslclasshallrepositorybackend.dto.RecursoRequestDto;
+import com.cesde.eslclasshallrepositorybackend.dto.RecursoResponseDto;
 import com.cesde.eslclasshallrepositorybackend.service.RecursoService;
 
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -32,29 +35,30 @@ public class RecursoController {
     }
 
     @GetMapping
-    public List<Recurso> obtenerTodos() {
-        return recursoService.obtenerTodos();
+    public List<RecursoResponseDto> obtenerTodos() {
+        return recursoService.obtenerTodos().stream().map(DtoMapper::toDto).toList();
     }
 
     @Operation(summary = "Consultar recursos aprobados")
     @GetMapping("/publicados")
-    public List<Recurso> obtenerPublicados() {
-        return recursoService.obtenerPublicados();
+    public List<RecursoResponseDto> obtenerPublicados() {
+        return recursoService.obtenerPublicados().stream().map(DtoMapper::toDto).toList();
     }
 
     @GetMapping("/{id}")
-    public Recurso obtenerPorId(@PathVariable UUID id) {
-        return recursoService.obtenerPorId(id);
+    public RecursoResponseDto obtenerPorId(@PathVariable UUID id) {
+        return DtoMapper.toDto(recursoService.obtenerPorId(id));
     }
 
     @PostMapping
-    public ResponseEntity<Recurso> crear(@RequestBody Recurso recurso) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(recursoService.crear(recurso));
+    public ResponseEntity<RecursoResponseDto> crear(@Valid @RequestBody RecursoRequestDto recurso) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(DtoMapper.toDto(recursoService.crear(DtoMapper.toEntity(recurso))));
     }
 
     @PutMapping("/{id}")
-    public Recurso actualizar(@PathVariable UUID id, @RequestBody Recurso recurso) {
-        return recursoService.actualizar(id, recurso);
+    public RecursoResponseDto actualizar(@PathVariable UUID id, @Valid @RequestBody RecursoRequestDto recurso) {
+        return DtoMapper.toDto(recursoService.actualizar(id, DtoMapper.toEntity(recurso)));
     }
 
     @DeleteMapping("/{id}")

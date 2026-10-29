@@ -93,4 +93,78 @@ public class Usuario extends BaseEntity {
             this.rol = RolUsuario.DOCENTE;
         }
     }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
+    }
+
+    public EstadoUsuario getEstado() {
+        return estado;
+    }
+
+    public void setEstado(EstadoUsuario estado) {
+        this.estado = estado;
+    }
+
+    public RolUsuario getRol() {
+        return rol;
+    }
+
+    public Direccion getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(Direccion direccion) {
+        this.direccion = direccion;
+    }
+
+    public PerfilUsuario getPerfil() {
+        return perfil;
+    }
+
+    public Set<SolicitudRecurso> getSolicitudes() {
+        return solicitudes;
+    }
+
+    public Set<Recurso> getRecursosCreados() {
+        return recursosCreados;
+    }
+
+    public void setRol(RolUsuario rol) {
+        this.rol = rol;
+    }
+
+    public void setPerfil(PerfilUsuario perfil) {
+        this.perfil = perfil;
+    }
+
+    public void setSolicitudes(Set<SolicitudRecurso> solicitudes) {
+        this.solicitudes = solicitudes;
+    }
+
+    public void setRecursosCreados(Set<Recurso> recursosCreados) {
+        this.recursosCreados = recursosCreados;
+    }
+
+
 }

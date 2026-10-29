@@ -14,10 +14,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.cesde.eslclasshallrepositorybackend.model.entity.Usuario;
+import com.cesde.eslclasshallrepositorybackend.dto.DtoMapper;
+import com.cesde.eslclasshallrepositorybackend.dto.UsuarioCreateRequestDto;
+import com.cesde.eslclasshallrepositorybackend.dto.UsuarioRequestDto;
+import com.cesde.eslclasshallrepositorybackend.dto.UsuarioResponseDto;
 import com.cesde.eslclasshallrepositorybackend.model.enums.RolUsuario;
 import com.cesde.eslclasshallrepositorybackend.service.UsuarioService;
 
+import jakarta.validation.Valid;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -33,28 +37,29 @@ public class UsuarioController {
     }
 
     @GetMapping
-    public List<Usuario> obtenerTodos() {
-        return usuarioService.obtenerTodos();
+    public List<UsuarioResponseDto> obtenerTodos() {
+        return usuarioService.obtenerTodos().stream().map(DtoMapper::toDto).toList();
     }
 
     @GetMapping("/{id}")
-    public Usuario obtenerPorId(@PathVariable UUID id) {
-        return usuarioService.obtenerPorId(id);
+    public UsuarioResponseDto obtenerPorId(@PathVariable UUID id) {
+        return DtoMapper.toDto(usuarioService.obtenerPorId(id));
     }
 
     @GetMapping("/email/{email}")
-    public Usuario obtenerPorEmail(@PathVariable String email) {
-        return usuarioService.obtenerPorEmail(email);
+    public UsuarioResponseDto obtenerPorEmail(@PathVariable String email) {
+        return DtoMapper.toDto(usuarioService.obtenerPorEmail(email));
     }
 
     @PostMapping
-    public ResponseEntity<Usuario> crear(@RequestBody Usuario usuario) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.crear(usuario));
+    public ResponseEntity<UsuarioResponseDto> crear(@Valid @RequestBody UsuarioCreateRequestDto usuario) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(DtoMapper.toDto(usuarioService.crear(DtoMapper.toEntity(usuario, null))));
     }
 
     @PutMapping("/{id}")
-    public Usuario actualizar(@PathVariable UUID id, @RequestBody Usuario usuario) {
-        return usuarioService.actualizar(id, usuario);
+    public UsuarioResponseDto actualizar(@PathVariable UUID id, @Valid @RequestBody UsuarioRequestDto usuario) {
+        return DtoMapper.toDto(usuarioService.actualizar(id, DtoMapper.toUpdateEntity(usuario)));
     }
 
     @DeleteMapping("/{id}")
@@ -65,13 +70,13 @@ public class UsuarioController {
 
     @Operation(summary = "Consultar administradores")
     @GetMapping("/rol/admin")
-    public List<Usuario> obtenerAdministradores() {
-        return usuarioService.obtenerTodos().stream().filter(usuario -> usuario.getRol() == RolUsuario.ADMIN).toList();
+    public List<UsuarioResponseDto> obtenerAdministradores() {
+        return usuarioService.obtenerPorRol(RolUsuario.ADMIN).stream().map(DtoMapper::toDto).toList();
     }
 
     @Operation(summary = "Consultar docentes")
     @GetMapping("/rol/docente")
-    public List<Usuario> obtenerDocentes() {
-        return usuarioService.obtenerTodos().stream().filter(usuario -> usuario.getRol() == RolUsuario.DOCENTE).toList();
+    public List<UsuarioResponseDto> obtenerDocentes() {
+        return usuarioService.obtenerPorRol(RolUsuario.DOCENTE).stream().map(DtoMapper::toDto).toList();
     }
 }

@@ -69,4 +69,69 @@ public class Recurso extends BaseEntity {
             inverseJoinColumns = @JoinColumn(name = "curso_clase_id"))
     @JsonIgnore
     private Set<CursoClase> cursos = new HashSet<>();
+
+    public void setEstado(EstadoRecurso estadoRecurso) {
+        this.estado = estadoRecurso;
+    }
+
+    public void setCursos(Set<CursoClase> cursos) {
+        if (this.cursos == null) {
+            this.cursos = new HashSet<>();
+        } else {
+            this.cursos.clear();
+        }
+        if (cursos != null) {
+            this.cursos.addAll(cursos);
+        }
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public TipoRecurso getTipo() {
+        return tipo;
+    }
+
+    public EstadoRecurso getEstado() {
+        return estado;
+    }
+
+    public Usuario getCreadoPor() {
+        return creadoPor;
+    }
+
+    public Set<CursoClase> getCursos() {
+        return cursos;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public void setTipo(TipoRecurso tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setCreadoPor(Usuario creadoPor) {
+        this.creadoPor = creadoPor;
+    }
+
+
 }

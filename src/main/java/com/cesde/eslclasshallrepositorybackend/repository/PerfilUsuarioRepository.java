@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.cesde.eslclasshallrepositorybackend.model.entity.PerfilUsuario;
 
 public interface PerfilUsuarioRepository extends JpaRepository<PerfilUsuario, UUID> {
+
+    boolean existsByUsuario_Id(UUID usuarioId);
 }

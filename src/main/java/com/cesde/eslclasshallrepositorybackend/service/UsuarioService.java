@@ -30,6 +30,14 @@ public class UsuarioService {
     }
 
     @Transactional(readOnly = true)
+    public List<Usuario> obtenerPorRol(RolUsuario rol) {
+        if (rol == null) {
+            throw new ReglaDeNegocioException("El rol es obligatorio");
+        }
+        return usuarioRepository.findByRol(rol);
+    }
+
+    @Transactional(readOnly = true)
     public Usuario obtenerPorId(UUID id) {
         return obtenerEntidad(id);
     }
@@ -80,10 +88,23 @@ public class UsuarioService {
 
     @Transactional
     public Usuario actualizar(UUID id, Usuario datos) {
+        return actualizar(id, datos, null);
+    }
+
+    @Transactional
+    public Usuario actualizar(UUID id, Usuario datos, RolUsuario rolEsperado) {
         if (datos == null) {
             throw new ReglaDeNegocioException("Los datos del usuario son obligatorios");
         }
-        Usuario usuario = obtenerEntidad(id);
+        validarActualizacion(datos);
+        Usuario usuario;
+        if (rolEsperado == RolUsuario.ADMIN) {
+            usuario = obtenerAdmin(id);
+        } else if (rolEsperado == RolUsuario.DOCENTE) {
+            usuario = obtenerDocente(id);
+        } else {
+            usuario = obtenerEntidad(id);
+        }
         if (datos.getEmail() != null && !datos.getEmail().equalsIgnoreCase(usuario.getEmail())) {
             validarEmailDisponible(datos.getEmail());
             usuario.setEmail(datos.getEmail());
@@ -106,6 +127,17 @@ public class UsuarioService {
     @Transactional
     public void eliminar(UUID id) {
         usuarioRepository.delete(obtenerEntidad(id));
+    }
+
+    @Transactional
+    public void eliminar(UUID id, RolUsuario rolEsperado) {
+        if (rolEsperado == RolUsuario.ADMIN) {
+            usuarioRepository.delete(obtenerAdmin(id));
+        } else if (rolEsperado == RolUsuario.DOCENTE) {
+            usuarioRepository.delete(obtenerDocente(id));
+        } else {
+            eliminar(id);
+        }
     }
 
     private Usuario crearSubtipo(Usuario datos) {
@@ -136,9 +168,22 @@ public class UsuarioService {
     }
 
     private void validarCrear(Usuario datos, RolUsuario rol) {
-        if (datos == null || datos.getNombre() == null || datos.getEmail() == null
-                || datos.getPasswordHash() == null || rol == null) {
+        if (datos == null || datos.getNombre() == null || datos.getNombre().isBlank()
+                || datos.getEmail() == null || datos.getEmail().isBlank()
+                || datos.getPasswordHash() == null || datos.getPasswordHash().isBlank() || rol == null) {
             throw new ReglaDeNegocioException("nombre, passwordHash, email y rol son obligatorios");
+        }
+        if (datos.getNombre().length() > 120 || datos.getEmail().length() > 180) {
+            throw new ReglaDeNegocioException("El nombre o el email supera la longitud permitida");
+        }
+    }
+
+    private void validarActualizacion(Usuario datos) {
+        if (datos.getNombre() != null && (datos.getNombre().isBlank() || datos.getNombre().length() > 120)) {
+            throw new ReglaDeNegocioException("El nombre debe contener texto y no superar 120 caracteres");
+        }
+        if (datos.getEmail() != null && (datos.getEmail().isBlank() || datos.getEmail().length() > 180)) {
+            throw new ReglaDeNegocioException("El email debe contener texto y no superar 180 caracteres");
         }
     }
 

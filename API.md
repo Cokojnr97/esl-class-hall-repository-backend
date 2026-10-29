@@ -45,4 +45,23 @@ For existing relationships, send nested objects containing only their `id`, for 
 }
 ```
 
-The development seed runs only when the database contains no users. It does not replace existing data.
+Write endpoints use request DTOs and return response DTOs. Nested references in requests contain an `id`; responses contain the reference `id` and display name. User responses never include `passwordHash`. Resource status and request-decision fields are managed by the approval workflow and are not accepted in write DTOs.
+
+Course request example:
+
+```json
+{
+  "nombre": "Present perfect",
+  "descripcion": "Guided practice",
+  "orden": 1,
+  "docente": {
+    "id": "00000000-0000-0000-0000-000000000000"
+  }
+}
+```
+
+Request bodies are validated for required values, field lengths, and email format. Validation errors return HTTP 400 with a `mensaje` field.
+
+When approving a `CREAR` request without `recursoObjetivo`, `payloadJson` must contain the resource data (`titulo`, `descripcion`, `url`, `tipo` and optional `cursos` references). Approving an `ACTUALIZAR` request applies the same payload fields to its target resource before publishing it.
+
+The development seed is disabled by default. Set `SEED_DATA=true` to enable it; it only runs when the database contains no users and does not replace existing data. Configure browser origins with `CORS_ALLOWED_ORIGINS` as a comma-separated list (by default, local development origins on ports 3000 and 5173 are allowed).
