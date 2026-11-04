@@ -3,6 +3,8 @@ package com.cesde.eslclasshallrepositorybackend.model.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.cesde.eslclasshallrepositorybackend.model.base.BaseEntity;
 import com.cesde.eslclasshallrepositorybackend.model.enums.EstadoRecurso;
 import com.cesde.eslclasshallrepositorybackend.model.enums.TipoRecurso;
@@ -30,6 +32,14 @@ import lombok.Setter;
 @Table(name = "recursos_migracion")
 public class Recurso extends BaseEntity {
 
+    public Recurso(String titulo, String descripcion, String url, TipoRecurso tipo, Usuario creadoPor) {
+        this.titulo = titulo;
+        this.descripcion = descripcion;
+        this.url = url;
+        this.tipo = tipo;
+        this.creadoPor = creadoPor;
+    }
+
     @Column(nullable = false, length = 200)
     private String titulo;
 
@@ -49,6 +59,7 @@ public class Recurso extends BaseEntity {
 
     @ManyToOne(optional = false)
     @JoinColumn(name = "creado_por_id", nullable = false)
+    @JsonIgnoreProperties({ "perfil", "solicitudes", "recursosCreados" })
     private Usuario creadoPor;
 
     @ManyToMany
@@ -56,5 +67,6 @@ public class Recurso extends BaseEntity {
             name = "curso_clase_recurso_migracion",
             joinColumns = @JoinColumn(name = "recurso_id"),
             inverseJoinColumns = @JoinColumn(name = "curso_clase_id"))
+    @JsonIgnore
     private Set<CursoClase> cursos = new HashSet<>();
 }

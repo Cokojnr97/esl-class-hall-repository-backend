@@ -1,5 +1,26 @@
-HELP.md
+### Maven ###
 target/
+*.class
+
+### Environment files and local secrets ###
+.env
+.env.*
+!.env.example
+
+### Logs and temporary files ###
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+
+### Operating system files ###
+.DS_Store
+Thumbs.db
+
+### Spring tooling ###
+.springBeans
+.sts4-cache
 .mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -10,8 +31,6 @@ target/
 .factorypath
 .project
 .settings
-.springBeans
-.sts4-cache
 
 ### IntelliJ IDEA ###
 .idea
@@ -31,3 +50,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+#documentation
+DEPLOYMENT.md

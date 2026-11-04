@@ -7,6 +7,8 @@ import com.cesde.eslclasshallrepositorybackend.model.base.BaseEntity;
 import com.cesde.eslclasshallrepositorybackend.model.embeddable.Direccion;
 import com.cesde.eslclasshallrepositorybackend.model.enums.EstadoUsuario;
 import com.cesde.eslclasshallrepositorybackend.model.enums.RolUsuario;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -51,6 +53,7 @@ public class Usuario extends BaseEntity {
     private String email;
 
     @Column(nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String passwordHash;
 
     @Enumerated(EnumType.STRING)
@@ -59,6 +62,7 @@ public class Usuario extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Setter(AccessLevel.NONE)
+    @JsonProperty
     @Column(nullable = false, length = 20, updatable = false)
     private RolUsuario rol;
 
@@ -66,12 +70,15 @@ public class Usuario extends BaseEntity {
     private Direccion direccion;
 
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private PerfilUsuario perfil;
 
     @OneToMany(mappedBy = "solicitadoPor", orphanRemoval = false)
+    @JsonIgnore
     private Set<SolicitudRecurso> solicitudes = new HashSet<>();
 
     @OneToMany(mappedBy = "creadoPor", orphanRemoval = false)
+    @JsonIgnore
     private Set<Recurso> recursosCreados = new HashSet<>();
 
     @PrePersist
