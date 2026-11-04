@@ -17,7 +17,7 @@ public class OpenApiConfig {
                 .info(new Info()
                         .title("ESL Class Hall Repository API")
                         .version("1.0.0")
-                        .description("API REST para administrar recursos digitales de enseñanza de inglés, cursos, usuarios y solicitudes de aprobación.")
+                        .description("API REST para administrar resources digitales de enseÃ±anza de inglÃ©s, courses, users y requests de aprobaciÃ³n.")
                         .contact(new Contact()
                                 .name("ESL Class Hall")
                                 .email("soporte@eslclasshall.com"))

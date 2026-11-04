@@ -42,7 +42,6 @@ public abstract class BaseEntity {
             updatedAt = now;
         }
     }
-
     @PreUpdate
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();

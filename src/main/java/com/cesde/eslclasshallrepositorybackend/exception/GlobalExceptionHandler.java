@@ -10,13 +10,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(RecursoNoEncontradoException.class)
-    public ResponseEntity<Map<String, String>> manejarNoEncontrado(RecursoNoEncontradoException ex) {
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Map<String, String>> manejarNoEncontrado(ResourceNotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("mensaje", ex.getMessage()));
     }
-
-    @ExceptionHandler(ReglaDeNegocioException.class)
-    public ResponseEntity<Map<String, String>> manejarReglaDeNegocio(ReglaDeNegocioException ex) {
+    @ExceptionHandler(BusinessRuleException.class)
+    public ResponseEntity<Map<String, String>> manejarBusinessRule(BusinessRuleException ex) {
         return ResponseEntity.badRequest().body(Map.of("mensaje", ex.getMessage()));
     }
 }
