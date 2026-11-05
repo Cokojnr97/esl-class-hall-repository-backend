@@ -1,6 +1,7 @@
 package com.cesde.eslclasshallrepositorybackend.model.entity;
 
 import com.cesde.eslclasshallrepositorybackend.model.base.BaseEntity;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -16,7 +17,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 @Table(name = "perfiles_usuario_migracion")
 public class PerfilUsuario extends BaseEntity {
@@ -29,5 +30,6 @@ public class PerfilUsuario extends BaseEntity {
 
     @OneToOne(optional = false)
     @JoinColumn(name = "usuario_id", nullable = false, unique = true)
+    @JsonIgnoreProperties({ "perfil", "solicitudes", "recursosCreados" })
     private Usuario usuario;
 }

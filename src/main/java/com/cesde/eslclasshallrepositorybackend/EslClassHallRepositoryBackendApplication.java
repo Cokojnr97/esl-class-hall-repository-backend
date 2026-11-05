@@ -9,5 +9,4 @@ public class EslClassHallRepositoryBackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(EslClassHallRepositoryBackendApplication.class, args);
 	}
-
 }

@@ -3,6 +3,7 @@ package com.cesde.eslclasshallrepositorybackend.model.entity;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.cesde.eslclasshallrepositorybackend.model.base.BaseEntity;
 
 import jakarta.persistence.Column;
@@ -26,6 +27,13 @@ import lombok.Setter;
 @Table(name = "curso_clases_migracion")
 public class CursoClase extends BaseEntity {
 
+    public CursoClase(String nombre, String descripcion, Integer orden, Docente docente) {
+        this.nombre = nombre;
+        this.descripcion = descripcion;
+        this.orden = orden;
+        this.docente = docente;
+    }
+
     @Column(nullable = false, length = 180)
     private String nombre;
 
@@ -41,5 +49,6 @@ public class CursoClase extends BaseEntity {
 
     @ManyToMany(mappedBy = "cursos")
     @OrderBy("titulo ASC")
+    @JsonIgnore
     private Set<Recurso> recursos = new HashSet<>();
 }
